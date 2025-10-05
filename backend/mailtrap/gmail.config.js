@@ -5,8 +5,8 @@ import path from 'path';
 dotenv.config({ path: path.resolve('.env') });
 
 const GMAIL_USER = process.env.GMAIL_USER;
+const GMAIL_PASS = (process.env.GMAIL_PASS || '').replace(/\s+/g, '');
 
-const GMAIL_PASS = process.env.GMAIL_PASS;
 if (!GMAIL_USER || !GMAIL_PASS) {
     console.warn('GMAIL_USER or GMAIL_PASS is not set. Email sending will fail until configured.');
 }
