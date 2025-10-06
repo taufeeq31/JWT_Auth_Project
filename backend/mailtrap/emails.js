@@ -4,11 +4,11 @@ import {
     VERIFICATION_EMAIL_TEMPLATE,
     WELCOME_EMAIL_TEMPLATE,
 } from './emailTemplates.js';
-import { gmailClient, sender } from './gmail.config.js';
+import { sendMail, defaultSender as sender } from './mailer.js';
 
 export const sendVerificationEmail = async (email, verificationToken) => {
     try {
-        const response = await gmailClient.sendMail({
+        const response = await sendMail({
             from: sender,
             to: email,
             subject: 'Verify your email',
@@ -25,7 +25,7 @@ export const sendVerificationEmail = async (email, verificationToken) => {
 
 export const sendWelcomeEmail = async (email, name) => {
     try {
-        const response = await gmailClient.sendMail({
+        const response = await sendMail({
             from: sender,
             to: email,
             subject: 'Welcome to Our Service',
@@ -42,7 +42,7 @@ export const sendWelcomeEmail = async (email, name) => {
 
 export const sendPasswordResetEmail = async (email, resetURL) => {
     try {
-        const response = await gmailClient.sendMail({
+        const response = await sendMail({
             from: sender,
             to: email,
             subject: 'Password Reset Request',
@@ -58,7 +58,7 @@ export const sendPasswordResetEmail = async (email, resetURL) => {
 
 export const sendResetSuccessEmail = async (email) => {
     try {
-        const response = await gmailClient.sendMail({
+        const response = await sendMail({
             from: sender,
             to: email,
             subject: 'Password Reset Successful',

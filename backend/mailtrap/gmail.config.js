@@ -21,7 +21,7 @@ const SMTP_SECURE = process.env.GMAIL_SECURE
 const SMTP_TIMEOUT = Number(process.env.SMTP_TIMEOUT_MS || 10000); // 10s
 
 // Nodemailer transporter configured to use Gmail SMTP
-export const gmailClient = nodemailer.createTransport({
+export const gmailClient = nodemailer.createTransport({ 
     host: SMTP_HOST,
     port: SMTP_PORT,
     secure: SMTP_SECURE,
