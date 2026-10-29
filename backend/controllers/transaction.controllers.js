@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Transaction from '@/models/transaction.model.js';
+import Transaction from '../models/transaction.model.js';
 
 // CREATE: Add a new transaction
 const createTransaction = async (req, res) => {
@@ -25,7 +25,7 @@ const createTransaction = async (req, res) => {
 		}
 
 		const transaction = await Transaction.create({
-			userId: req.user.id || req.user._id,
+			userId: req.userId,
 			type,
 			amount: Number(amount),
 			category,
@@ -50,7 +50,7 @@ const createTransaction = async (req, res) => {
 const listTransactions = async (req, res) => {
 	try {
 		const transactions = await Transaction.find({
-			userId: req.user.id || req.user._id,
+			userId: req.userId,
 		}).sort({ date: -1, createdAt: -1 });
 
 		return res.status(200).json({
@@ -123,7 +123,7 @@ const updateTransaction = async (req, res) => {
 		const transaction = await Transaction.findOneAndUpdate(
 			{
 				_id: id,
-				userId: req.user.id || req.user._id,
+				userId: req.userId,
 			},
 			{ $set: updates },
 			{
@@ -163,7 +163,7 @@ const deleteTransaction = async (req, res) => {
 
 		const transaction = await Transaction.findOneAndDelete({
 			_id: id,
-			userId: req.user.id || req.user._id,
+			userId: req.userId,
 		});
 
 		if (!transaction) {
@@ -183,9 +183,5 @@ const deleteTransaction = async (req, res) => {
 	}
 };
 
-module.exports = {
-	createTransaction,
-	listTransactions,
-	updateTransaction,
-	deleteTransaction,
-};
+export { createTransaction, listTransactions, updateTransaction, deleteTransaction };
+

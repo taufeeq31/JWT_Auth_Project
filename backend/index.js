@@ -4,6 +4,9 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 
+import transactionRoutes from './routes/transaction.routes.js';
+import { verifyToken} from './middleware/verifyToken.js';
+
 import { connectDB } from './db/connectDB.js';
 
 import authRoutes from './routes/auth.routes.js';
@@ -20,21 +23,22 @@ app.use(express.json()); // allows us to parse incoming requests:req.body
 app.use(cookieParser()); // allows us to parse incoming cookies
 
 app.use('/api/auth', authRoutes);
+app.use('/api/transactions', verifyToken, transactionRoutes);
 
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '/frontend/dist')));
+	app.use(express.static(path.join(__dirname, '/frontend/dist')));
 
-    // Express 5 + path-to-regexp v8: avoid wildcard strings; instead use a terminal middleware.
-    // Serve SPA index.html for any non-API GET route that wasn't matched above.
-    app.use((req, res, next) => {
-        if (req.method === 'GET' && !req.path.startsWith('/api')) {
-            return res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'));
-        }
-        next();
-    });
+	// Express 5 + path-to-regexp v8: avoid wildcard strings; instead use a terminal middleware.
+	// Serve SPA index.html for any non-API GET route that wasn't matched above.
+	app.use((req, res, next) => {
+		if (req.method === 'GET' && !req.path.startsWith('/api')) {
+			return res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'));
+		}
+		next();
+	});
 }
 
 app.listen(PORT, () => {
-    connectDB();
-    console.log('Server is running on port: ', PORT);
+	connectDB();
+	console.log('Server is running on port: ', PORT);
 });
